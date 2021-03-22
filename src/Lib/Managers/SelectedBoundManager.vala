@@ -429,12 +429,7 @@ public class Akira.Lib.Managers.SelectedBoundManager : Object {
         Items.CanvasItem item = selected_items.nth_data (0);
 
         if (!initial_drag_registered) {
-            Managers.NobManager.get_selected_nob_position (
-                selected_nob,
-                selected_items,
-                out initial_drag_press_x,
-                out initial_drag_press_y
-            );
+            canvas.nob_manager.nobs[selected_nob].get_transform(out matrix);
 
             item.get_transform (out initial_item_transform);
             initial_drag_registered = true;
@@ -452,8 +447,35 @@ public class Akira.Lib.Managers.SelectedBoundManager : Object {
             }
         }
 
-        double rel_event_x = event_x;
-        double rel_event_y = event_y;
+        int snap_offset_x = 0;
+        int snap_offset_y = 0;
+
+        if (settings.enable_snaps && window.items_manager.get_items_count () > 1) {
+            var sensitivity = Utils.Snapping.adjusted_sensitivity (canvas.current_scale);
+            var snap_grid = Utils.Snapping.generate_best_snap_grid (canvas, selected_items, sensitivity);
+            if (!snap_grid.is_empty ()) {
+
+                var matches = Utils.Snapping.generate_snap_matches_for_point (
+                    snap_grid,
+                    (int)event_x,
+                    (int)event_y,
+                    sensitivity
+                );
+
+                if (matches.h_data.snap_found ()) {
+                    snap_offset_x = matches.h_data.snap_offset();
+                }
+
+                if (matches.v_data.snap_found ()) {
+                    snap_offset_y = matches.v_data.snap_offset();
+                }
+
+                update_grid_decorators (true);
+            }
+        }
+
+        double rel_event_x = event_x + snap_offset_x;
+        double rel_event_y = event_y + snap_offset_y;
         double rel_press_x = initial_drag_press_x;
         double rel_press_y = initial_drag_press_y;
 

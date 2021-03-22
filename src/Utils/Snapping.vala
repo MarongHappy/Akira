@@ -23,6 +23,8 @@
  * Utility providing snap functionality between objects.
  */
 public class Akira.Utils.Snapping : Object {
+    private const double SENSITIVITY = 4.0;
+
     /**
      * Metadata used in the cosmetic aspects of snap lines and dots.
      */
@@ -98,12 +100,12 @@ public class Akira.Utils.Snapping : Object {
      */
     public static int adjusted_sensitivity (double canvas_scale) {
         // Limit the sensitivity. This seems like a sensible default for now.
-        if (canvas_scale > settings.snaps_sensitivity) {
+        if (canvas_scale > SENSITIVITY) {
             return 1;
         }
 
         // Beyond 0.002, the snapping breaks down. Arguably, it does before.
-        return (int) (settings.snaps_sensitivity / double.max (0.002, canvas_scale));
+        return (int) (SENSITIVITY / double.max (0.002, canvas_scale));
     }
 
     /**
@@ -114,9 +116,43 @@ public class Akira.Utils.Snapping : Object {
         List<Lib.Items.CanvasItem> selection,
         int sensitivity
     ) {
-        Lib.Items.CanvasArtboard artboard = null;
+        var artboard = artboard_for_snap_grid (canvas, selection);
+        if (artboard == null) {
+            return snap_grid_from_canvas (canvas, selection, sensitivity);
+        }
+
+        return snap_grid_from_artboard (canvas, artboard, selection, sensitivity);
+    }
+
+    /**
+     * Generates the best snap grid from selection for point
+     */
+    public static SnapGrid generate_best_snap_grid_for_point (
+        Goo.Canvas canvas,
+        List<Lib.Items.CanvasItem> selection,
+        int pos_x,
+        int pos_y,
+        int sensitivity
+    ) {
+
+        var artboard = artboard_for_snap_grid (canvas, selection);
+        if (artboard == null) {
+            return snap_grid_from_canvas_for_point (canvas, selection, pos_x, pos_y, sensitivity);
+        }
+
+        return snap_grid_from_artboard (canvas, artboard, selection, sensitivity);
+    }
+
+    /*
+     * Return true if canvas should be used for snap grid candidate selection.
+     */
+    private static Lib.Items.CanvasArtboard? artboard_for_snap_grid (
+        Goo.Canvas canvas,
+        List<Lib.Items.CanvasItem> selection
+    ) {
         bool all_in_same_artboard = false;
 
+        Lib.Items.CanvasArtboard artboard = null;
         foreach (var sel in selection) {
             if (artboard != null && artboard != sel.artboard) {
                 all_in_same_artboard = false;
@@ -127,17 +163,14 @@ public class Akira.Utils.Snapping : Object {
             all_in_same_artboard = artboard != null;
         }
 
-        if (artboard != null && all_in_same_artboard) {
-            return snap_grid_from_artboard (canvas, artboard, selection, sensitivity);
-        }
-
-        return snap_grid_from_canvas (canvas, selection, sensitivity);
+        return all_in_same_artboard ? artboard : null;
     }
+
 
     /**
      * Generates a snap grid from a canvas.
      */
-    public static SnapGrid snap_grid_from_canvas (
+    private static SnapGrid snap_grid_from_canvas (
         Goo.Canvas canvas,
         List<Lib.Items.CanvasItem> selection,
         int sensitivity
@@ -169,7 +202,7 @@ public class Akira.Utils.Snapping : Object {
     /**
      * Generates a snap grid from an artboard.
      */
-    public static SnapGrid snap_grid_from_artboard (
+    private static SnapGrid snap_grid_from_artboard (
         Goo.Canvas canvas,
         Lib.Items.CanvasArtboard artboard,
         List<Lib.Items.CanvasItem> selection,
@@ -182,6 +215,38 @@ public class Akira.Utils.Snapping : Object {
         }
 
         return snap_grid_from_artboard_candidates (candidates, selection, artboard);
+    }
+
+    /**
+     * Generates a snap grid from a canvas.
+     */
+    private static SnapGrid snap_grid_from_canvas_for_point (
+        Goo.Canvas canvas,
+        List<Lib.Items.CanvasItem> selection,
+        int pos_x,
+        int pos_y,
+        int sensitivity
+    ) {
+        List<weak Goo.CanvasItem> vertical_candidates = null;
+        List<weak Goo.CanvasItem> horizontal_candidates = null;
+
+        Goo.CanvasBounds vertical_filter = {0, 0, 0, 0};
+        Goo.CanvasBounds horizontal_filter = {0, 0, 0, 0};
+
+        horizontal_filter.x1 = pos_x - sensitivity;
+        horizontal_filter.x2 = pos_x + sensitivity;
+        horizontal_filter.y1 = canvas.y1;
+        horizontal_filter.y2 = canvas.y2;
+
+        vertical_filter.x1 = canvas.x1;
+        vertical_filter.x2 = canvas.x2;
+        vertical_filter.y1 = pos_y - sensitivity;
+        vertical_filter.y2 = pos_y + sensitivity;
+
+        vertical_candidates.concat (canvas.get_items_in_area (vertical_filter, true, true, true));
+        horizontal_candidates.concat (canvas.get_items_in_area (horizontal_filter, true, true, true));
+
+        return snap_grid_from_canvas_candidates (vertical_candidates, horizontal_candidates, selection, false);
     }
 
     /**
@@ -201,6 +266,29 @@ public class Akira.Utils.Snapping : Object {
             populate_horizontal_snaps (item, ref h_sel_snaps);
             populate_vertical_snaps (item, ref v_sel_snaps);
         }
+
+        populate_snap_matches_from_list (h_sel_snaps, grid.h_snaps, ref matches.h_data, sensitivity);
+        populate_snap_matches_from_list (v_sel_snaps, grid.v_snaps, ref matches.v_data, sensitivity);
+
+        return matches;
+    }
+
+    /**
+     * Calculate snaps inside a grid match for a specific point.
+     */
+    public static SnapMatchData generate_snap_matches_for_point (
+        SnapGrid grid,
+        int pos_x,
+        int pos_y,
+        int sensitivity
+    ) {
+        var matches = default_match_data ();
+
+        var v_sel_snaps = new Gee.HashMap<int, SnapMeta> ();
+        var h_sel_snaps = new Gee.HashMap<int, SnapMeta> ();
+
+        add_to_map(pos_y, 0, 0, 0, -1, ref v_sel_snaps);
+        add_to_map(pos_x, 0, 0, 0, -1, ref h_sel_snaps);
 
         populate_snap_matches_from_list (h_sel_snaps, grid.h_snaps, ref matches.h_data, sensitivity);
         populate_snap_matches_from_list (v_sel_snaps, grid.v_snaps, ref matches.v_data, sensitivity);
