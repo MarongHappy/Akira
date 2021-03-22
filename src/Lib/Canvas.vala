@@ -255,7 +255,7 @@ public class Akira.Lib.Canvas : Goo.Canvas {
 
                 selected_bound_manager.set_initial_coordinates (event.x, event.y);
 
-                nob_manager.selected_nob = Managers.NobManager.Nob.BOTTOM_RIGHT;
+                nob_manager.set_selected_by_name (Managers.NobManager.Nob.BOTTOM_RIGHT);
 
                 // Update the pixel grid if it's visible in order to move it to the foreground.
                 if (is_grid_visible) {
@@ -297,7 +297,7 @@ public class Akira.Lib.Canvas : Goo.Canvas {
                     clicked_nob_name = nob_manager.get_grabbed_id (selected_nob);
                 }
 
-                nob_manager.selected_nob = clicked_nob_name;
+                nob_manager.set_selected_by_name (clicked_nob_name);
 
                 // If we're clicking on the Artboard's label, change the target to the Artboard.
                 if (

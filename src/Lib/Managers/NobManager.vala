@@ -75,7 +75,6 @@ public class Akira.Lib.Managers.NobManager : Object {
 
     construct {
         root = canvas.get_root_item ();
-
         canvas.window.event_bus.selected_items_list_changed.connect (on_add_select_effect);
         canvas.window.event_bus.selected_items_changed.connect (on_add_select_effect);
         canvas.window.event_bus.zoom.connect (on_canvas_zoom);
@@ -85,6 +84,66 @@ public class Akira.Lib.Managers.NobManager : Object {
 
     private void on_canvas_zoom () {
         on_add_select_effect (canvas.selected_bound_manager.selected_items);
+    }
+
+    /*
+     * Get nob position
+     */
+    public static void get_selected_nob_position (
+        Nob nob,
+        List<Items.CanvasItem> selected_items,
+        out double x,
+        out double y
+    ) {
+        // Bounding box edges
+        double bb_left = 1e6, bb_top = 1e6, bb_right = 0, bb_bottom = 0;
+
+        foreach (var item in selected_items) {
+            bb_left = double.min (bb_left, item.coordinates.x1);
+            bb_top = double.min (bb_top, item.coordinates.y1);
+            bb_right = double.max (bb_right, item.coordinates.x2);
+            bb_bottom = double.max (bb_bottom, item.coordinates.y2);
+        }
+
+        x = bb_left;
+        y = bb_top;
+
+        switch (nob) {
+        case Nob.TOP_LEFT:
+            break;
+        case Nob.TOP_CENTER:
+            x += (bb_left - bb_right) / 2.0;
+            break;
+        case Nob.TOP_RIGHT:
+            x = bb_right;
+            break;
+        case Nob.RIGHT_CENTER:
+            x = bb_right;
+            y += (bb_top - bb_bottom) / 2.0;
+            break;
+        case Nob.BOTTOM_RIGHT:
+            x = bb_right;
+            y = bb_bottom;
+            break;
+        case Nob.BOTTOM_CENTER:
+            x += (bb_left - bb_right) / 2.0;
+            y = bb_bottom;
+            break;
+        case Nob.BOTTOM_LEFT:
+            y = bb_bottom;
+            break;
+        case Nob.LEFT_CENTER:
+            y += (bb_top - bb_bottom) / 2.0;
+            break;
+        case Nob.ROTATE:
+            x = 0;
+            y = 0;
+            break;
+        default:
+            x = 0;
+            y = 0;
+            break;
+        }
     }
 
     public void set_selected_by_name (Nob selected_nob) {

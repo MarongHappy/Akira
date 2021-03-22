@@ -128,7 +128,7 @@ public class Akira.Lib.Managers.SelectedBoundManager : Object {
                 break;
 
             default:
-                scale_from_event (selected_item, selected_nob, event_x, event_y);
+                scale_from_event (selected_nob, event_x, event_y);
                 break;
         }
 
@@ -422,12 +422,20 @@ public class Akira.Lib.Managers.SelectedBoundManager : Object {
     }
 
     private void scale_from_event (
-        Lib.Items.CanvasItem item,
         Managers.NobManager.Nob selected_nob,
         double event_x,
         double event_y
     ) {
+        Items.CanvasItem item = selected_items.nth_data (0);
+
         if (!initial_drag_registered) {
+            Managers.NobManager.get_selected_nob_position (
+                selected_nob,
+                selected_items,
+                out initial_drag_press_x,
+                out initial_drag_press_y
+            );
+
             item.get_transform (out initial_item_transform);
             initial_drag_registered = true;
             initial_drag_item_x = item.coordinates.x1;
