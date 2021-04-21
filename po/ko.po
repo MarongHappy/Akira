@@ -1,8 +1,9 @@
+# JungHee Lee <daemul72@gmail.com>, 2021
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2020-10-07 21:17+0200\n"
-"PO-Revision-Date: 2021-04-05 15:52+0900\n"
+"PO-Revision-Date: 2021-04-22 06:47+0900\n"
 "Last-Translator: 이정희 <daemul72@gmail.com>\n"
 "Language-Team: \n"
 "Language: ko\n"
@@ -60,7 +61,7 @@ msgid ""
 "expected."
 msgstr ""
 "경고!\n"
-"아키라는 아직 개발 중이며 제품 준비가 되지 않았습니다. 누락된 기능, 임의의 "
+"Akira는 아직 개발 중이며 제품 준비가 되지 않았습니다. 누락된 기능, 임의의 "
 "버그 및 부엌에서 열리는 블랙홀이 예상됩니다."
 
 #: src/Dialogs/ReleaseDialog.vala:100 src/Dialogs/SettingsDialog.vala:249
@@ -150,7 +151,7 @@ msgstr "테두리 너비:"
 
 #: src/Dialogs/SettingsDialog.vala:209
 msgid "The Linux Design Tool"
-msgstr "리눅스 디자인 도구"
+msgstr "리눅스 디자인 도구 - 번역: 이정희 <daemul72@gmail.com>"
 
 #: src/Dialogs/SettingsDialog.vala:226
 msgid "Thanks to our awesome supporters!"
@@ -218,7 +219,7 @@ msgstr "축소:"
 
 #: src/Dialogs/ShortcutsDialog.vala:82
 msgid "Zoom reset:"
-msgstr "확대/축소 재설정"
+msgstr "확대/축소 재설정:"
 
 #: src/Dialogs/ShortcutsDialog.vala:85
 msgid "Item creation"
@@ -230,11 +231,11 @@ msgstr "아트보드:"
 
 #: src/Dialogs/ShortcutsDialog.vala:88
 msgid "Rectangle:"
-msgstr "직사각형:"
+msgstr "사각형:"
 
 #: src/Dialogs/ShortcutsDialog.vala:90
 msgid "Ellipse:"
-msgstr "타원형:"
+msgstr "원형:"
 
 #: src/Dialogs/ShortcutsDialog.vala:92
 msgid "Text:"
@@ -275,7 +276,7 @@ msgstr "수직으로 뒤집기:"
 
 #: src/FileFormat/FileManager.vala:46
 msgid "Save Akira file"
-msgstr "아키라 파일 저장"
+msgstr "Akira 파일 저장"
 
 #: src/FileFormat/FileManager.vala:48 src/Layouts/HeaderBar.vala:190
 msgid "Save"
@@ -283,7 +284,7 @@ msgstr "저장"
 
 #: src/FileFormat/FileManager.vala:71
 msgid "Akira files"
-msgstr "아키라 파일"
+msgstr "Akira 파일"
 
 #: src/FileFormat/FileManager.vala:76
 msgid "All files"
@@ -291,7 +292,7 @@ msgstr "모든 파일"
 
 #: src/FileFormat/FileManager.vala:103
 msgid "Open Akira file"
-msgstr "아키라 파일 열기"
+msgstr "Akira 파일 열기"
 
 #: src/FileFormat/FileManager.vala:105 src/Layouts/HeaderBar.vala:170
 msgid "Open"
@@ -339,7 +340,7 @@ msgstr "설정"
 
 #: src/Layouts/HeaderBar.vala:118
 msgid "Difference"
-msgstr "차이"
+msgstr "다름"
 
 #: src/Layouts/HeaderBar.vala:120
 msgid "Exclusion"
@@ -351,7 +352,7 @@ msgstr "교차"
 
 #: src/Layouts/HeaderBar.vala:124
 msgid "Union"
-msgstr "결합"
+msgstr "연합"
 
 #: src/Layouts/HeaderBar.vala:161
 msgid "New Window"
@@ -379,11 +380,11 @@ msgstr "항목 추가"
 
 #: src/Layouts/HeaderBar.vala:262
 msgid "Rectangle"
-msgstr "직사각"
+msgstr "사각형"
 
 #: src/Layouts/HeaderBar.vala:268
 msgid "Ellipse"
-msgstr "타원"
+msgstr "원형"
 
 #: src/Layouts/HeaderBar.vala:286
 msgid "Vector"
@@ -645,7 +646,7 @@ msgstr "%i × %i px · %s"
 
 #: src/Partials/ExportWidget.vala:124
 msgid "Fetching image size…"
-msgstr "이미지 크기 가져오는 중..."
+msgstr "이미지 크기 가져오는 중…"
 
 #: src/Partials/ZoomButton.vala:49
 msgid "Zoom Out"
@@ -715,3 +716,53 @@ msgstr "저장하지 않고 종료!"
 #: src/Window.vala:125
 msgid "Save file"
 msgstr "파일 저장"
+
+#
+#: src/Layouts/HeaderBar.vala:115
+msgid "Layout"
+msgstr "레이아웃"
+
+#: src/Layouts/HeaderBar.vala:376
+msgid "Toggle Pixel Grid"
+msgstr "픽셀 그리드 전환"
+
+#: src/Layouts/HeaderBar.vala:382
+msgid "Presentation Mode"
+msgstr "프레젠테이션 모드"
+
+#: src/Layouts/HeaderBar.vala:415
+msgid "Presentation Mode enabled."
+msgstr "프레젠테이션 모드 활성화됨."
+
+#
+#: src/Dialogs/SettingsDialog.vala:131
+msgid "Pixel Grid"
+msgstr "픽셀 그리드"
+
+#: src/Dialogs/SettingsDialog.vala:133
+msgid "Define the default color for the Canvas pixel grid."
+msgstr "캔버스 픽셀 그리드의 기본 색상을 정의합니다."
+
+#: src/Dialogs/SettingsDialog.vala:133
+msgid "Pixel Grid Color:"
+msgstr "픽셀 그리드 색상:"
+
+#: src/Dialogs/SettingsDialog.vala:164
+msgid "Snapping Guides"
+msgstr "스냅핑 가이드"
+
+#: src/Dialogs/SettingsDialog.vala:166
+msgid "Define the default options for the Snapping Guides."
+msgstr "스냅핑 가이드의 기본 옵션을 정의합니다."
+
+#: src/Dialogs/SettingsDialog.vala:171
+msgid "Enable Snapping Guides:"
+msgstr "스냅핑 가이드 활성화:"
+
+#: src/Dialogs/SettingsDialog.vala:175
+msgid "Snapping Guides Color:"
+msgstr "스냅핑 가이드 색상:"
+
+#: src/Dialogs/SettingsDialog.vala:197
+msgid "Snapping Sensitivity Threshold:"
+msgstr "스냅핑 감도 임계값:"
